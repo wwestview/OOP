@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyMatrix
+namespace Matrix
 {
-    partial class MyMatrix
+    public partial class MyMatrix
     {
         public static MyMatrix operator +(MyMatrix a, MyMatrix b)
         {
@@ -28,13 +28,13 @@ namespace MyMatrix
 
             return result;
         }
-    
+
         public static MyMatrix operator *(MyMatrix a, MyMatrix b)
         {
-            if (a.Height != b.Height || a.Width != b.Width) 
-                    {
-                    throw new ArgumentException("The matrix must be the same size"); 
-                    }
+            if (a.Height != b.Height || a.Width != b.Width)
+            {
+                throw new ArgumentException("The matrix must be the same size");
+            }
             MyMatrix result = new MyMatrix(new double[a.Height, b.Width]);
 
             for (int i = 0; i < a.Height; i++)
@@ -52,76 +52,85 @@ namespace MyMatrix
 
             return result;
         }
-        private double[,] GetTransponedArray()
+        protected double[,] GetTransponedArray()
         {
-            int rows = matrix.GetLength(0);
-            int cols = matrix.GetLength(1);
+            int rows = matrixCopy.GetLength(0);
+            int cols = matrixCopy.GetLength(1);
             double[,] transposed = new double[cols, rows];
 
             for (int i = 0; i < rows; i++)
             {
                 for (int j = 0; j < cols; j++)
                 {
-                    transposed[j, i] = matrix[i, j];
+                    transposed[j, i] = matrixCopy[i, j];
                 }
             }
             return transposed;
         }
-        public void PrintTranspose()
-        {
-            double[,] transposedArray = GetTransponedArray();
-            for (int i = 0; i < transposedArray.GetLength(0); i++)
-            {
-                for (int j = 0; j < transposedArray.GetLength(1); j++)
-                {
-                    Console.Write(transposedArray[i, j] + " ");
-                }
-                Console.WriteLine();
-            }
-
-        }
+   
         public MyMatrix GetTransponedCopy()
         {
             double[,] transposedArray = GetTransponedArray();
             return new MyMatrix(transposedArray);
 
         }
-        public void PrintMatrix()
+        
+        public void TransposeMe()
         {
-            for (int i = 0; i < matrix.GetLength(0); i++)
-            {
-                for (int j = 0; j < matrix.GetLength(1); j++)
-                {
-                    Console.Write(matrix[i, j] + " ");
-                }
-                Console.WriteLine();
-            }
+            double[,] transposedArray = GetTransponedArray();
+            matrixCopy = transposedArray;
         }
-    }
-
-    class Program
-    {
-        static void Main(string[] args)
+        public double CalcDeterminant()
         {
-            /* MyMatrix matrixA = new MyMatrix(new double[,] { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } });
-             MyMatrix matrixB = new MyMatrix(new double[,] { { 7, 8, 9 }, { 10, 11, 12 }, { 13, 14, 15 } });
-             MyMatrix matrixC = matrixA + matrixB;
-             Console.WriteLine("Matrix 1:");
-             Console.WriteLine(matrixA);
-             Console.WriteLine("Matrix 2:");
-             Console.WriteLine(matrixB);
-             Console.WriteLine("Result of addition:");
-             Console.WriteLine(matrixC);
-             */
-            double[,] initialMatrix = { { 1, 2, 3 }, { 4, 5, 6 } };
-            MyMatrix myMatrix = new MyMatrix(initialMatrix);
+            if (Height != Width) { throw new ArgumentException("Matrix must be square matrix."); }
+            if (cachedDet.HasValue && !isMod) { return cachedDet.Value; }
+            double[,] matrixCopy = (double[,])this.matrixCopy.Clone();
+            int n = Height;
+            double det = 1;
 
-            Console.WriteLine("Original Matrix:");
-            myMatrix.PrintMatrix();
+            for (int i = 0; i < n; i++)
+            {
+                if (matrixCopy[i, i] == 0)
+                {
+                    bool swapped = false;
+                    for (int j = i + 1; j < n; j++)
+                    {
+                        if (matrixCopy[j, i] != 0)
+                        {
+                            SwapRows(matrixCopy, i, j);
+                            det *= -1; 
+                            swapped = true;
+                            break;
+                        }
+                    }
+                    if (!swapped) return 0;
+                }
 
-            MyMatrix transposedMatrix = myMatrix.GetTransponedCopy();
-            Console.WriteLine("Transposed Matrix:");
-            transposedMatrix.PrintMatrix();
+                for (int j = i + 1; j < n; j++)
+                {
+                    double factor = matrixCopy[j, i] / matrixCopy[i, i];
+                    for (int k = i; k < n; k++)
+                    {
+                        matrixCopy[j, k] -= factor * matrixCopy[i, k];
+                    }
+                }
+
+                det *= matrixCopy[i, i];
+            }
+
+            cachedDet = det;
+            isMod = false;
+            return det;
+        }
+        protected void SwapRows(double[,] array, int row1, int row2)
+        {
+            int cols = array.GetLength(1);
+            for (int i = 0; i < cols; i++)
+            {
+                double temp = array[row1, i];
+                array[row1, i] = array[row2, i];
+                array[row2, i] = temp;
+            }
         }
     }
 }
