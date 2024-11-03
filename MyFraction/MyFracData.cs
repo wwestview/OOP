@@ -40,7 +40,10 @@ partial class MyFrac
         if (f.nom < 0) minus = "-";
         long intPart = Math.Abs(f.nom) / f.denom;
         long nom = Math.Abs(f.nom) - intPart * f.denom;
-
+        if (nom == 0)
+        {
+            return $"{minus}{intPart}/{f.denom}";
+        }
         if (intPart == 0)
         {
             return $"{minus}({new MyFrac(nom, f.denom)})";

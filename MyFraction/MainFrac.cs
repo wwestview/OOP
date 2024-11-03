@@ -10,7 +10,8 @@ namespace MyFraction
     {
         static void Main()
         {
-            MyFrac fr = new(7, 3);
+            MyFrac fr = new(4, 8);
+            Console.WriteLine(MyFrac.ToStringWithIntPart(fr));
         }
           
     }
