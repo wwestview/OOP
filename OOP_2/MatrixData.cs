@@ -1,8 +1,9 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 
 namespace Matrix
 {
-   public partial class MyMatrix
+    public partial class MyMatrix
     {
         protected double[,] matrix;
         protected double? cachedDet = null;
@@ -26,7 +27,6 @@ namespace Matrix
             int width = other.Width;
             this.matrix = new double[height, width];
             matrix = (double[,])other.matrix.Clone();
-            InvalidateCache();
         }
         public MyMatrix(double[,] multiDimensionsMatrix)
         {
@@ -34,7 +34,6 @@ namespace Matrix
             int width = multiDimensionsMatrix.GetLength(1);
             matrix = new double[height, width];
             matrix = (double[,])multiDimensionsMatrix.Clone();
-            InvalidateCache();
         }
         public MyMatrix(double[][] jaggedMatrix)
         {
@@ -52,58 +51,71 @@ namespace Matrix
             {
                 for (int j = 0; j < width; j++)
                 {
-                    matrix[i,j] = jaggedMatrix[i][j];
+                    matrix[i, j] = jaggedMatrix[i][j];
                 }
             }
-            InvalidateCache();
         }
-        public MyMatrix(string[] strRow)
+        public MyMatrix(string[] str)
         {
-            int strRowsLen = strRow.Length;
-            string[][] splitStrRow = new string[strRowsLen][];
-            int colLen = 0;
-            for (int i = 0; i < strRowsLen; i++)
+            int rows = str.Length;
+            int cols = str[0].Length;
+            matrix = new double[rows, cols];
+
+            for (int i = 0; i < rows; i++)
             {
-                splitStrRow[i] = strRow[i].Split(new[] {' ','\t'}, StringSplitOptions.RemoveEmptyEntries);
-                if (i == 0) { colLen = splitStrRow[i].Length; }
-            }
-            matrix = new double[strRowsLen,colLen];
-            for (int i = 0; i < strRowsLen; i++)
-            {
-                for (int j = 0; j < colLen; j++)
+                int[] tempArr = Array.ConvertAll(str[i].Trim().Split(), int.Parse);
+                for (int j = 0; j < cols; j++)
                 {
-                    matrix[i,j] = Convert.ToDouble(splitStrRow[i][j]);
+                    matrix[i, j] = tempArr[j];
                 }
             }
             InvalidateCache();
         }
-        public MyMatrix(string matrixSt)
+        public MyMatrix(string input)
         {
-            string[] rows = matrixSt.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            List<string[]> parsedRows = new List<string[]>();
-            foreach (string i in rows) { parsedRows.Add(i.Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries)); }
-            int rowLen = parsedRows.Count;
-            int colLen = parsedRows[0].Length;
-            matrix = new double[rowLen,colLen];
-            for (int i = 0; i < rowLen; i++)
+            string[] str = input.Split(new[] { "\n", "\r" }, StringSplitOptions.RemoveEmptyEntries);
+
+            string[][] strMatrix = new string[str.Length][];
+
+            for (int i = 0; i < str.Length; i++)
             {
-                for (int j = 0; j < colLen; j++)
+                strMatrix[i] = str[i].Split(new[] { " ", "\t" }, StringSplitOptions.RemoveEmptyEntries);
+            }
+            int rows = strMatrix.Length;
+            int cols = strMatrix[0].Length;
+
+            matrix = new double[rows, cols];
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < cols; j++)
                 {
-                    matrix[i,j] = Convert.ToDouble(parsedRows[i][j]);
+                    matrix[i, j] = double.Parse(strMatrix[i][j]);
                 }
             }
             InvalidateCache();
         }
+
         public int getHeight() => Height;
         public int getWidth() => Width;
         public double this[int row, int col]
         {
-            get => matrix[row,col];
-            set => matrix[row,col] = value;
+            get => matrix[row, col];
+            set
+            {
+                matrix[row,col] = value;
+                InvalidateCache();
+            }
         }
-        public double GetElement(int row, int col) => matrix[row,col];
-        public double SetElement(int row, int col, double value)  => matrix[row,col] = value;
-        
+        public double getElement(int row, int col)
+        {
+            return matrix[row, col];
+        }
+        public void setElement(int row, int col, double value)
+        {
+           matrix[row, col] = value;
+            InvalidateCache();
+        }
+            
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
