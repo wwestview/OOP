@@ -10,9 +10,14 @@ namespace MyFraction
     {
         static void Main()
         {
-            MyFrac fr =  new(4, 8);
-            Console.WriteLine(MyFrac.DoubleValue(fr));
-            Console.WriteLine(MyFrac.ToStringWithIntPart(fr));
+            MyFrac f1 =  new(12, 4);
+            MyFrac f2 = new(4, 8);
+            Console.WriteLine(MyFrac.DoubleValue(f1));
+            Console.WriteLine(f1 + f2);
+            Console.WriteLine(f1 - f2);
+            Console.WriteLine(f1 * f2);
+            Console.WriteLine(f1 / f2);
+            Console.WriteLine(MyFrac.ToStringWithIntPart(f1));
         }
           
     }
