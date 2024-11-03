@@ -4,7 +4,7 @@ namespace Matrix
 {
    public partial class MyMatrix
     {
-        protected double[,] matrixCopy;
+        protected double[,] matrix;
         protected double? cachedDet = null;
         protected bool isMod = true;
         protected void InvalidateCache()
@@ -12,28 +12,28 @@ namespace Matrix
             isMod = true;
             cachedDet = null;
         }
-        public int Height
+        public int Height //row
         {
-            get => matrixCopy.GetLength(0);
+            get => matrix.GetLength(0);
         }
-        public int Width
+        public int Width // col
         {
-            get => matrixCopy.GetLength(1);
+            get => matrix.GetLength(1);
         }
         public MyMatrix(MyMatrix other)
         {
             int height = other.Height;
             int width = other.Width;
-            matrixCopy = new double[height, width];
-            matrixCopy = (double[,])other.matrixCopy.Clone();
+            this.matrix = new double[height, width];
+            matrix = (double[,])other.matrix.Clone();
             InvalidateCache();
         }
         public MyMatrix(double[,] multiDimensionsMatrix)
         {
             int height = multiDimensionsMatrix.GetLength(0);
             int width = multiDimensionsMatrix.GetLength(1);
-            matrixCopy = new double[height, width];
-            matrixCopy = (double[,])multiDimensionsMatrix.Clone();
+            matrix = new double[height, width];
+            matrix = (double[,])multiDimensionsMatrix.Clone();
             InvalidateCache();
         }
         public MyMatrix(double[][] jaggedMatrix)
@@ -47,12 +47,12 @@ namespace Matrix
                     throw new ArgumentException("All subarrays must have the same number of elements.");
                 }
             }
-            matrixCopy = new double[height, width];
+            matrix = new double[height, width];
             for (int i = 0; i < height; i++)
             {
                 for (int j = 0; j < width; j++)
                 {
-                    matrixCopy[i,j] = jaggedMatrix[i][j];
+                    matrix[i,j] = jaggedMatrix[i][j];
                 }
             }
             InvalidateCache();
@@ -67,12 +67,12 @@ namespace Matrix
                 splitStrRow[i] = strRow[i].Split(new[] {' ','\t'}, StringSplitOptions.RemoveEmptyEntries);
                 if (i == 0) { colLen = splitStrRow[i].Length; }
             }
-            matrixCopy = new double[strRowsLen,colLen];
+            matrix = new double[strRowsLen,colLen];
             for (int i = 0; i < strRowsLen; i++)
             {
                 for (int j = 0; j < colLen; j++)
                 {
-                    matrixCopy[i,j] = Convert.ToDouble(splitStrRow[i][j]);
+                    matrix[i,j] = Convert.ToDouble(splitStrRow[i][j]);
                 }
             }
             InvalidateCache();
@@ -84,12 +84,12 @@ namespace Matrix
             foreach (string i in rows) { parsedRows.Add(i.Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries)); }
             int rowLen = parsedRows.Count;
             int colLen = parsedRows[0].Length;
-            matrixCopy = new double[rowLen,colLen];
+            matrix = new double[rowLen,colLen];
             for (int i = 0; i < rowLen; i++)
             {
                 for (int j = 0; j < colLen; j++)
                 {
-                    matrixCopy[i,j] = Convert.ToDouble(parsedRows[i][j]);
+                    matrix[i,j] = Convert.ToDouble(parsedRows[i][j]);
                 }
             }
             InvalidateCache();
@@ -98,16 +98,12 @@ namespace Matrix
         public int getWidth() => Width;
         public double this[int row, int col]
         {
-            get => matrixCopy[row,col];
-            set => matrixCopy[row,col] = value;
+            get => matrix[row,col];
+            set => matrix[row,col] = value;
         }
-        public double GetElement(int row, int col) => matrixCopy[row,col];
-        public double SetElement(int row, int col, double value)  => matrixCopy[row,col] = value;
-        public void SetMatrix(double[,] newMatrix)
-        {
-            matrixCopy = (double[,]) newMatrix.Clone();
-            InvalidateCache();
-        }
+        public double GetElement(int row, int col) => matrix[row,col];
+        public double SetElement(int row, int col, double value)  => matrix[row,col] = value;
+        
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
@@ -115,12 +111,14 @@ namespace Matrix
             {
                 for (int j = 0; j < Width; j++)
                 {
-                    sb.Append(matrixCopy[i, j] + "\t");
+                    sb.Append(matrix[i, j] + "\t");
                 }
                 sb.AppendLine();
             }
             return sb.ToString();
         }
+      
+
     }
 
 }

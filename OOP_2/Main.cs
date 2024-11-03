@@ -7,33 +7,35 @@ namespace MyMatrixApp
         static void Main()
         {
             // 1. Constructor: Copying from another instance
-            double[,] initialArray = { { 1, 4, 6 }, { 8, 13, 9 }, { 6, 7, 5 } };
+            double[,] initialArray = { { 2, 9, 0 }, { 3, 7, 1 }, { -4, -4, 0 } };
             MyMatrix matrix1 = new MyMatrix(initialArray);
             MyMatrix matrixCopy = new MyMatrix(matrix1);
             Console.WriteLine("Matrix created by copying from another instance:");
             Console.WriteLine(matrixCopy);
-            Console.WriteLine("Determinant: "+ Math.Floor(matrixCopy.CalcDeterminant()));
-            Console.WriteLine("Adding two matrices: \n" + (matrix1+matrixCopy));
-            Console.WriteLine("Multiply two matrices: ");
-            Console.WriteLine(matrix1*matrixCopy);
+            double det = matrixCopy.CalcDeterminant();
+            Console.WriteLine("Determinant: " + (det));
 
+            Console.WriteLine("Adding two matrices: \n" + (matrix1 + matrixCopy));
+            Console.WriteLine("Multiply two matrices: ");
+            Console.WriteLine(matrix1 * matrixCopy);
             // 2. Constructor: From a 2D array of type double[,]
-            double[,] array = { { 44, 12, 4 }, { 6, 6, 5 }, { 12, 3, 10 } };
+            double[,] array = { { 0, 12, 4 }, { 0, 6, 5 }, { 0, 3, 10 } };
             MyMatrix matrix2 = new MyMatrix(array);
             Console.WriteLine("Matrix created from a 2D array of type double[,]:");
             Console.WriteLine(matrix2);
-            Console.WriteLine("Determinant: " + Math.Floor(matrix2.CalcDeterminant()));
+            Console.WriteLine("Determinant: " + (matrix2.CalcDeterminant()));
 
             // 3. Constructor: From a jagged array double[][]
             double[][] jaggedArray = new double[][]
             {
-                new double[] { 15, 23, 25 },
-                new double[] { 14, 23, 8 },
-                new double[] { 17, 16, 19 }
+                new double[] { 0, 6, 7 },
+                new double[] { 9, 0, 5 },
+                new double[] { 5, 6, 0 }
             };
             MyMatrix matrix3 = new MyMatrix(jaggedArray);
             Console.WriteLine("Matrix created from a jagged array double[][]:");
             Console.WriteLine(matrix3);
+            Console.WriteLine(matrix3.CalcDeterminant());
 
             // 4. Constructor: From an array of strings (each row of the matrix is a string)
             string[] stringRows = { "65 24 23", "2 15 27", "56 54 13" };
@@ -46,7 +48,7 @@ namespace MyMatrixApp
             MyMatrix matrix5 = new MyMatrix(matrixString);
             Console.WriteLine("Matrix created from a single string:");
             Console.WriteLine(matrix5);
-            Console.WriteLine("Determinant: " + Math.Floor(matrix5.CalcDeterminant()));
+            Console.WriteLine("Determinant: " + (matrix5.CalcDeterminant()));
         }
     }
 }

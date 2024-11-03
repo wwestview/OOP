@@ -20,7 +20,7 @@ namespace Matrix
 
             for (int i = 0; i < a.Height; i++)
             {
-                for (int j = 0; j < a.Width; j++)
+                for (int j = 0; j < b.Height; j++)
                 {
                     result[i, j] = a[i, j] + b[i, j];
                 }
@@ -54,15 +54,15 @@ namespace Matrix
         }
         protected double[,] GetTransponedArray()
         {
-            int rows = matrixCopy.GetLength(0);
-            int cols = matrixCopy.GetLength(1);
+            int rows = matrix.GetLength(0);
+            int cols = matrix.GetLength(1);
             double[,] transposed = new double[cols, rows];
 
             for (int i = 0; i < rows; i++)
             {
                 for (int j = 0; j < cols; j++)
                 {
-                    transposed[j, i] = matrixCopy[i, j];
+                    transposed[j, i] = matrix[i, j];
                 }
             }
             return transposed;
@@ -70,21 +70,18 @@ namespace Matrix
    
         public MyMatrix GetTransponedCopy()
         {
-            double[,] transposedArray = GetTransponedArray();
-            return new MyMatrix(transposedArray);
-
+            return new MyMatrix(GetTransponedArray());
         }
         
         public void TransposeMe()
         {
-            double[,] transposedArray = GetTransponedArray();
-            matrixCopy = transposedArray;
+            matrix = GetTransponedArray();
         }
         public double CalcDeterminant()
         {
             if (Height != Width) { throw new ArgumentException("Matrix must be square matrix."); }
             if (cachedDet.HasValue && !isMod) { return cachedDet.Value; }
-            double[,] matrixCopy = (double[,])this.matrixCopy.Clone();
+            double[,] matrixCopy = (double[,])this.matrix.Clone();
             int n = Height;
             double det = 1;
 
@@ -101,6 +98,7 @@ namespace Matrix
                             det *= -1; 
                             swapped = true;
                             break;
+                            
                         }
                     }
                     if (!swapped) return 0;
@@ -120,7 +118,7 @@ namespace Matrix
 
             cachedDet = det;
             isMod = false;
-            return det;
+            return Math.Floor(det);
         }
         protected void SwapRows(double[,] array, int row1, int row2)
         {
