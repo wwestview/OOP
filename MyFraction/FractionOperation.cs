@@ -8,7 +8,15 @@
     {
         return new MyFrac(f1.nom * f2.denom + f1.denom * f2.nom, f1.denom * f2.denom);
     }
+    public static MyFrac Plus(MyFrac f1, MyFrac f2)
+    {
+        return new MyFrac(f1.nom * f2.denom + f1.denom * f2.nom, f1.denom * f2.denom);
+    }
     public static MyFrac operator -(MyFrac f1, MyFrac f2)
+    {
+        return new MyFrac(f1.nom * f2.denom - f1.denom * f2.nom, f1.denom * f2.denom);
+    }
+    public static MyFrac Minus(MyFrac f1, MyFrac f2)
     {
         return new MyFrac(f1.nom * f2.denom - f1.denom * f2.nom, f1.denom * f2.denom);
     }
@@ -16,7 +24,15 @@
     {
         return new MyFrac(f1.nom * f2.nom, f1.denom * f2.denom);
     }
+    public static MyFrac Multiply(MyFrac f1, MyFrac f2)
+    {
+        return new MyFrac(f1.nom * f2.nom, f1.denom * f2.denom);
+    }
     public static MyFrac operator /(MyFrac f1, MyFrac f2)
+    {
+        return new MyFrac(f1.nom * f2.denom, f1.denom * f2.nom);
+    }
+    public static MyFrac Divide(MyFrac f1, MyFrac f2)
     {
         return new MyFrac(f1.nom * f2.denom, f1.denom * f2.nom);
     }
