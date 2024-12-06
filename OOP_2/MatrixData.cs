@@ -23,21 +23,15 @@ namespace Matrix
         }
         public MyMatrix(MyMatrix other)
         {
-            int height = other.Height;
-            int width = other.Width;
-            this.matrix = new double[height, width];
-            matrix = (double[,])other.matrix.Clone();
+            this.matrix = (double[,])other.matrix.Clone();
         }
         public MyMatrix(double[,] multiDimensionsMatrix)
         {
-            int height = multiDimensionsMatrix.GetLength(0);
-            int width = multiDimensionsMatrix.GetLength(1);
-            matrix = new double[height, width];
-            matrix = (double[,])multiDimensionsMatrix.Clone();
+            this.matrix = (double[,])multiDimensionsMatrix.Clone();
         }
         public MyMatrix(double[][] jaggedMatrix)
         {
-            int height = jaggedMatrix.Length;
+            int height = jaggedMatrix.Length; 
             int width = jaggedMatrix[0].Length;
             for (int i = 0; i < height; i++)
             {
@@ -57,19 +51,18 @@ namespace Matrix
         }
         public MyMatrix(string[] str)
         {
-            int rows = str.Length;
-            int cols = str[0].Length;
+            int rows = str.Length; 
+            int cols = str[0].Trim().Split().Length;
             matrix = new double[rows, cols];
-
+            InvalidateCache();
             for (int i = 0; i < rows; i++)
             {
-                int[] tempArr = Array.ConvertAll(str[i].Trim().Split(), int.Parse);
+                double[] tempArr = Array.ConvertAll(str[i].Trim().Split(), double.Parse);
                 for (int j = 0; j < cols; j++)
                 {
                     matrix[i, j] = tempArr[j];
                 }
             }
-            InvalidateCache();
         }
         public MyMatrix(string input)
         {
@@ -85,6 +78,7 @@ namespace Matrix
             int cols = strMatrix[0].Length;
 
             matrix = new double[rows, cols];
+            InvalidateCache();
             for (int i = 0; i < rows; i++)
             {
                 for (int j = 0; j < cols; j++)
@@ -92,17 +86,16 @@ namespace Matrix
                     matrix[i, j] = double.Parse(strMatrix[i][j]);
                 }
             }
-            InvalidateCache();
         }
 
         public int getHeight() => Height;
         public int getWidth() => Width;
-        public double this[int row, int col]
+        public double this[int index1, int index2]
         {
-            get => matrix[row, col];
+            get => matrix[index1, index2];
             set
             {
-                matrix[row,col] = value;
+                matrix[index1,index2] = value;
                 InvalidateCache();
             }
         }

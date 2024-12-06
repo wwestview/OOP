@@ -80,7 +80,10 @@ namespace Matrix
         public double CalcDeterminant()
         {
             if (Height != Width) { throw new ArgumentException("Matrix must be square matrix."); }
-            if (cachedDet.HasValue && !isMod) { return cachedDet.Value; }
+            if (cachedDet.HasValue && !isMod) 
+            { 
+                return cachedDet.Value; 
+            }
             double[,] matrixCopy = (double[,])this.matrix.Clone();
             int n = Height;
             double det = 1;
@@ -118,7 +121,7 @@ namespace Matrix
 
             cachedDet = det;
             isMod = false;
-            return Math.Floor(det);
+            return det;
         }
         protected void SwapRows(double[,] array, int row1, int row2)
         {

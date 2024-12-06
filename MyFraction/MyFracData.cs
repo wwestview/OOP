@@ -29,26 +29,26 @@ partial class MyFrac
             {
                 t_nom %= t_denom;
             }
-            else t_denom %= nom;
+            else t_denom %= t_nom;
         }
         this.nom = Math.Abs(nom) / gcd * sign;
         this.denom = Math.Abs(denom) / gcd;
     }
-    public static string ToStringWithIntPart(MyFrac f)
+    public string ToStringWithIntPart()
     {
         string minus = "";
-        if (f.nom < 0) minus = "-";
-        long intPart = Math.Abs(f.nom) / f.denom;
-        long nom = Math.Abs(f.nom) - intPart * f.denom;
+        if (this.nom < 0) minus = "-";
+        long intPart = Math.Abs(this.nom) / this.denom;
+        long nom = Math.Abs(this.nom) - intPart * this.denom;
         if (nom == 0)
         {
-            return $"{minus}({intPart}/{f.denom})";
+            return $"{minus}({intPart}/{this.denom})";
         }
         if (intPart == 0)
         {
-            return $"{minus}({new MyFrac(nom, f.denom)})";
+            return $"{minus}({new MyFrac(nom, this.denom)})";
         }
-        return $"{minus}({intPart}+{new MyFrac(nom, f.denom)})";
+        return $"{minus}({intPart}+{new MyFrac(nom, this.denom)})";
     }
     public override string ToString()
     {
